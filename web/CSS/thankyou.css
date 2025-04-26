@@ -1,9 +1,69 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
-*/
-/* 
-    Created on : 26 Apr 2025, 14:38:10
-    Author     : Christine
-*/
+body {
+    background-color: rgb(253, 253, 214);
+    font-family: Times New Roman;
+    margin: 0;
+    padding: 20px;
+}
 
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.thank-you-box {
+    width: 750px;
+    padding: 40px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.summary-item {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+th {
+    background-color: #f2f2f2;
+}
+
+.submitBtn {
+    background-color: rgb(253, 253, 214);
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.submitBtn:hover {
+    background-color: black;
+    color: rgb(253, 253, 214);
+}

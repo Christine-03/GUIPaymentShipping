@@ -7,9 +7,8 @@ import jakarta.persistence.*;
 public class PaymentMethod {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "methodId")
-    private int methodId;
+    private String methodId;
 
     @Column(name = "methodName", nullable = false)
     private String methodName;
@@ -42,11 +41,11 @@ public class PaymentMethod {
     }
 
     // Getters and Setters
-    public int getMethodId() {
+    public String getMethodId() {
         return methodId;
     }
 
-    public void setMethodId(int methodId) {
+    public void setMethodId(String methodId) {
         this.methodId = methodId;
     }
 

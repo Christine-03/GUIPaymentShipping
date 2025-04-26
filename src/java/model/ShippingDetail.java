@@ -7,9 +7,8 @@ import jakarta.persistence.*;
 public class ShippingDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shippingId")
-    private int shippingId;
+    private String shippingId;
 
     @ManyToOne
     @JoinColumn(name = "buyerId", nullable = false)
@@ -28,11 +27,11 @@ public class ShippingDetail {
     }
 
     // Getters and Setters
-    public int getShippingId() {
+    public String getShippingId() {
         return shippingId;
     }
 
-    public void setShippingId(int shippingId) {
+    public void setShippingId(String shippingId) {
         this.shippingId = shippingId;
     }
 

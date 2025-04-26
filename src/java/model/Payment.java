@@ -9,9 +9,8 @@ import java.sql.Time;
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "paymentId")
-    private int paymentId;
+    private String paymentId;
 
     @Column(name = "transactionId", nullable = false, unique = true)
     private String transactionId;
@@ -29,28 +28,19 @@ public class Payment {
     // Constructors
     public Payment() {}
 
-    public Payment(String transactionId, PaymentMethod method, Date paidDate, Time paidTime) {
-        this.transactionId = transactionId;
+    public Payment(PaymentMethod method, Date paidDate, Time paidTime) {
         this.method = method;
         this.paidDate = paidDate;
         this.paidTime = paidTime;
     }
 
     // Getters and Setters
-    public int getPaymentId() {
+    public String getPaymentId() {
         return paymentId;
     }
 
-    public void setPaymentId(int paymentId) {
+    public void setPaymentId(String paymentId) {
         this.paymentId = paymentId;
-    }
-
-    public String getTransactionId() {
-        return transactionId;
-    }
-
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
     }
 
     public PaymentMethod getMethod() {

@@ -38,20 +38,20 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Thank You for Your Order</title>
-    <link href="../CSS/payment.css" rel="stylesheet" type="text/css">
+    <link href="../CSS/thankyou.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <div class="container">
         <div class="thank-you-box">
-            <h1 class="title">Order Received</h1>
+            <h1 class="title">Order Received !</h1>
             
             <div class="order-summary">
-                <p class="summary-text">Thank you. Your order has been received.</p>
+                <p class="summary-text">Thank you for your order. We've received your order and are processing it.</p>
                 
                 <div class="summary-grid">
                     <div class="summary-item">
                         <span class="summary-label">Order Number</span>
-                        <span class="summary-value">${payment.transactionId}</span>
+                        <span class="summary-value">${OrderConfirmedServlet.orderId}</span>
                     </div>
                     <div class="summary-item">
                         <span class="summary-label">Order Date</span>

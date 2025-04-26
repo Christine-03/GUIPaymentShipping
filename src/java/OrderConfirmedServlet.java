@@ -44,7 +44,7 @@ public class OrderConfirmedServlet extends HttpServlet {
             String orderId = generateOrderId();
             String orderDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             String userId = (String) session.getAttribute("userId");
-            if (userId == null) userId = "guest";
+            //if (userId == null) userId = "guest";
             
             // 3. Save order with payment and shipping references
             saveOrderToDatabase(orderId, userId, orderDate, 
@@ -72,6 +72,10 @@ public class OrderConfirmedServlet extends HttpServlet {
     
     private String generateOrderId() {
         return "ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    } 
+    // ORD-001
+
+    public OrderConfirmedServlet() {
     }
     
     private void saveOrderToDatabase(String orderId, String userId, String orderDate, Double subtotal, Double taxAmount, Double deliveryFee, Double totalAmount, List<CartItem> cartItems, Integer paymentId, Integer shippingId) throws SQLException {

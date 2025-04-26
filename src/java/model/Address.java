@@ -7,9 +7,8 @@ import jakarta.persistence.*;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "addressId")
-    private int addressId;
+    private String addressId;
 
     @Column(name = "address", nullable = false)
     private String address;
@@ -34,11 +33,11 @@ public class Address {
     }
 
     // Getters and Setters
-    public int getAddressId() {
+    public String getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(int addressId) {
+    public void setAddressId(String addressId) {
         this.addressId = addressId;
     }
 

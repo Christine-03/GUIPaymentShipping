@@ -29,31 +29,29 @@ public class PaymentDAO {
             // Start transaction
             con.setAutoCommit(false);
                         
-            // 1. Insert PaymentMethod
-            String methodSql = "INSERT INTO NBUSER.PAYMENTMETHOD(\"methodName\", \"cardOwner\", \"cardNumber\", \"expMonth\", \"expYear\", \"cvv\") VALUES (?, ?, ?, ?, ?, ?)";
-            methodStmt = con.prepareStatement(methodSql, Statement.RETURN_GENERATED_KEYS);
-            methodStmt.setString(1, method.getMethodName());
-            methodStmt.setString(2, method.getCardOwner());
-            methodStmt.setString(3, method.getCardNumber());
-            methodStmt.setString(4, method.getExpMonth());
-            methodStmt.setString(5, method.getExpYear());
-            methodStmt.setString(6, method.getCvv());
-            methodStmt.executeUpdate();
-            
-            ResultSet methodKeys = methodStmt.getGeneratedKeys();
-            int methodId = 0;
-            if (methodKeys.next()) {
-                methodId = methodKeys.getInt(1);
-            } else {
-                throw new SQLException("Creating payment method failed, no ID obtained.");
-            }
+            // 1. Generate format for paymentMethodId & paymentId
+            String nextMethodId = generateMethodId(con);
+            String nextPaymentId = generatePaymentId(con);     
 
-            // 2. Insert payment
-            String paySql = "INSERT INTO NBUSER.PAYMENT(\"methodId\", \"paidDate\", \"paidTime\") VALUES (?, ?, ?)";
+            // 2. Insert into PaymentMethod db
+            String methodSql = "INSERT INTO NBUSER.PAYMENTMETHOD (\"methodId\", \"methodName\", \"cardOwner\", \"cardNumber\", \"expMonth\", \"expYear\", \"cvv\") VALUES (?, ?, ?, ?, ?, ?, ?)";
+            methodStmt = con.prepareStatement(methodSql);
+            methodStmt.setString(1, nextMethodId);
+            methodStmt.setString(2, method.getMethodName());
+            methodStmt.setString(3, method.getCardOwner());
+            methodStmt.setString(4, method.getCardNumber());
+            methodStmt.setString(5, method.getExpMonth());
+            methodStmt.setString(6, method.getExpYear());
+            methodStmt.setString(7, method.getCvv());
+            methodStmt.executeUpdate();
+
+            // 3. Insert into Payment db
+            String paySql = "INSERT INTO NBUSER.PAYMENT (\"paymentId\", \"methodId\", \"paidDate\", \"paidTime\") VALUES (?, ?, ?, ?)";
             payStmt = con.prepareStatement(paySql);
-            payStmt.setInt(1, methodId);
-            payStmt.setDate(2, Date.valueOf(LocalDate.now()));
-            payStmt.setTime(3, Time.valueOf(LocalTime.now()));
+            payStmt.setString(1, nextPaymentId);
+            payStmt.setString(2, nextMethodId); 
+            payStmt.setDate(3, Date.valueOf(LocalDate.now()));
+            payStmt.setTime(4, Time.valueOf(LocalTime.now()));
             payStmt.executeUpdate();
 
             // Commit transaction
@@ -84,25 +82,34 @@ public class PaymentDAO {
         return success;
     }
     
-    // ✅ 新增方法：通过 cardNumber 查询最新的 paymentId
-    public int getPaymentIdByCardNumber(String cardNumber) throws Exception {
-        int paymentId = 0;
-
-        try (Connection conn = getConnection()) {
-            String sql = "SELECT paymentId FROM NBUSER.PAYMENT " +
-                         "WHERE methodId = (SELECT MAX(methodId) FROM NBUSER.PAYMENTMETHOD WHERE cardNumber = ?) " +
-                         "ORDER BY paymentId DESC FETCH FIRST ROW ONLY";
-
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, cardNumber);
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    paymentId = rs.getInt("paymentId");
-                }
+    // Generate for methodId -> PMD-0001
+    private String generateMethodId(Connection con) throws SQLException {
+        String sql = "SELECT MAX(\"methodId\") AS maxId FROM NBUSER.PAYMENTMETHOD";
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next() && rs.getString("maxId") != null) {
+                String maxId = rs.getString("maxId"); 
+                int num = Integer.parseInt(maxId.substring(4)); 
+                return String.format("PMD-%04d", num + 1);
+            } else {
+                return "PMD-0001"; 
             }
         }
+    }
 
-        return paymentId;
+    // Generate for paymentId -> PYT-0001
+    private String generatePaymentId(Connection con) throws SQLException {
+        String sql = "SELECT MAX(\"paymentId\") AS maxId FROM NBUSER.PAYMENT";
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next() && rs.getString("maxId") != null) {
+                String maxId = rs.getString("maxId");
+                int num = Integer.parseInt(maxId.substring(4));
+                return String.format("PYT-%04d", num + 1);
+            } else {
+                return "PYT-0001";
+            }
+        }
     }
 }
 
