@@ -1,6 +1,56 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="model.Payment, model.BuyerDetail" %>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Thank You for Your Order</title>
+    <link href="../CSS/thankyou.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="tq-container">
+        <div class="thank-you-box">
+            <h1 class="title">THANK YOU FOR YOUR ORDER</h1>
+            <p class="conclusion-text">We've received your order and are processing it...</p>
+            
+            <div class="info-section">
+                <div class="info-row">
+                    <span class="info-label">Order Number</span>
+                    <span class="info-value">${order.orderId}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Order Date</span>
+                    <span class="info-value">${orderDate}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Order Status</span>
+                    <span class="info-value">Processing</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Payment Method</span>
+                    <span class="info-value">${paymentMethod}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Order Total</span>
+                    <span class="info-value">RM ${totalAmount}</span>
+                </div>
+            </div>
+            
+            <div class="delivery-info">
+                <p><strong>Estimated delivery:</strong> 3-5 business days</p>
+                <p><strong>Shipping address:</strong> ${shippingAddress}</p>
+            </div>
+            
+            <div class="backHomeButton">
+                <a href="UserHome.jsp" class="home-link">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
 <!--<!DOCTYPE html>
 <html>
 <head>
@@ -30,76 +80,3 @@
     </div>
 </body>
 </html>-->
-
-
-
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Thank You for Your Order</title>
-    <link href="../CSS/thankyou.css" rel="stylesheet" type="text/css">
-</head>
-<body>
-    <div class="container">
-        <div class="thank-you-box">
-            <h1 class="title">Order Received !</h1>
-            
-            <div class="order-summary">
-                <p class="summary-text">Thank you for your order. We've received your order and are processing it.</p>
-                
-                <div class="summary-grid">
-                    <div class="summary-item">
-                        <span class="summary-label">Order Number</span>
-                        <span class="summary-value">${OrderConfirmedServlet.orderId}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Order Date</span>
-                        <span class="summary-value">${orderDate}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Order Status</span>
-                        <span class="summary-value">Processing</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Payment Method</span>
-                        <span class="summary-value">${paymentMethod}</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="receipt-details">
-                <h2 class="subtitle">Order Details</h2>
-                <p>A confirmation email has been sent to: <strong>${buyer.email}</strong></p>
-                
-                 You can add order items table here if needed 
-                 Example:
-                <table class="order-items">
-                    <tr>
-                        <th>Product</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                    </tr>
-                    <c:forEach items="${orderItems}" var="item">
-                        <tr>
-                            <td>${item.productName}</td>
-                            <td>${item.quantity}</td>
-                            <td>RM ${item.price}</td>
-                        </tr>
-                    </c:forEach>
-                </table>
-                
-                
-                <div class="delivery-info">
-                    <p><strong>Estimated delivery:</strong> 3-5 business days</p>
-                </div>
-            </div>
-            
-            <div class="action-buttons">
-                <a href="UserHome.jsp" class="home-link">Return to Home</a>
-                <a href="OrderHistory.jsp" class="order-history-link">View Order History</a>
-            </div>
-        </div>
-    </div>
-</body>
-</html>

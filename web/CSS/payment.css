@@ -86,12 +86,11 @@ form .row {
     filter: drop-shadow(0 0 0.5px #000);    
 }
 
-/* Selected payment method style */
 .icon-container button.selected {
-    outline: 3.5px solid #4CAF50; /* Green border for selected */
-    background-color: rgba(76, 175, 80, 0.1); /* Light green background */
-    transform: scale(1.05); /* Slightly enlarge */
-    box-shadow: 0 0 5px rgba(0,0,0,0.2); /* Subtle shadow */
+    outline: 3.5px solid #4CAF50; 
+    background-color: rgba(76, 175, 80, 0.1);
+    transform: scale(1.05); 
+    box-shadow: 0 0 5px rgba(0,0,0,0.2); 
     display: flex;
     justify-content: center;
 }

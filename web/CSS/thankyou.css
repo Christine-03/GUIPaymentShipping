@@ -1,69 +1,115 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
 body {
     background-color: rgb(253, 253, 214);
-    font-family: Times New Roman;
-    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
     padding: 20px;
 }
 
-.container {
-    display: flex;
-    justify-content: center;
+.tq-container {
+    width: 100%;
+    max-width: 600px;
 }
 
 .thank-you-box {
-    width: 750px;
-    padding: 40px;
     background: white;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .title {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
+    color: #333;
     text-align: center;
     margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
 }
 
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin: 20px 0;
+.conclusion-text {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #555;
+    font-size: 15px;
 }
 
-.summary-item {
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 6px;
-}
-
-table {
+.info-section {
+    margin: 25px 0;
     width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
 }
 
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-th {
-    background-color: #f2f2f2;
+
+.info-row {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
 }
 
-.submitBtn {
+.info-row:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-color: #d0d0d0;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #555555;
+    font-size: 15px;
+    flex: 1;
+}
+
+.info-value {
+    font-weight: 500;
+    color: #333333;
+    font-size: 15px;
+    text-align: right;
+    flex: 1;
+}
+.info-row:last-child {
+    background-color: #f8f9fa;
+    border-color: #d1e7ff;
+}
+
+.info-row:last-child .info-value {
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.backHomeButton {
+    margin-top: 30px; /* or 30px if you want more space */
+    text-align: center; /* optional: center your button */
+}
+
+.backHomeButton a {
+    display: block;
+    padding: 12px 20px;
     background-color: rgb(253, 253, 214);
     color: black;
-    padding: 10px 20px;
-    border: none;
     border-radius: 4px;
+    text-align: center;
     text-decoration: none;
-    display: inline-block;
+    transition: all 0.3s ease;
 }
 
-.submitBtn:hover {
+.backHomeButton a:hover {
     background-color: black;
     color: rgb(253, 253, 214);
 }
+
