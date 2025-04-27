@@ -39,7 +39,7 @@ public class ValidatePaymentServlet extends HttpServlet {
             return;
         }
         
-        // Validate if it's one of the accepted methods
+        // Validate if it's one of accepted methods
         if (paymentMethod.equalsIgnoreCase("cash") || 
             paymentMethod.equalsIgnoreCase("tng") || 
             paymentMethod.equalsIgnoreCase("visa") || 
@@ -58,7 +58,7 @@ public class ValidatePaymentServlet extends HttpServlet {
             return;
         }
         
-        // Card owner should contain only letters and spaces
+        // Card owner should contain only letters & spaces
         if (cardOwner.matches("^[A-Za-z\\s]+$")) {
             response.getWriter().write("Valid Card Owner");
         } else {

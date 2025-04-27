@@ -15,10 +15,10 @@ if (username != null && email != null && mobileNo != null && password != null &&
     } else { 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver"); 
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user", "root", "admin");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/glowydays", "nbuser", "nbuser");
 
             // Using PreparedStatement to prevent SQL Injection
-            String sql = "INSERT INTO user (username, email, mobileNo, password, Rpassword) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO NBUSER.user (username, email, mobileNo, password, Rpassword) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1, username);
             pst.setString(2, email);

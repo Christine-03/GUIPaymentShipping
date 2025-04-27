@@ -93,8 +93,8 @@ body {
 }
 
 .backHomeButton {
-    margin-top: 30px; /* or 30px if you want more space */
-    text-align: center; /* optional: center your button */
+    margin-top: 30px; 
+    text-align: center;
 }
 
 .backHomeButton a {

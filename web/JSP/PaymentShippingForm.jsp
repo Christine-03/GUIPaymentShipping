@@ -119,528 +119,526 @@
     </div>
     
     <!-- VALIDATE SHIPPING DETAIL -->
-<!-- Replace the problematic shipping validation section with this fixed code -->
-<script>
-    $(document).ready(function() {
-        // -------------------------------
-        //    SHIPPING NAME VALIDATION
-        // -------------------------------
-        $('#shippingName').on('keyup', function() {
-            var name = $(this).val().trim();
-            var nameRegex = /^[A-Za-z\s/]+$/; // Only letters, spaces, and '/'
+    <!-- Replace the problematic shipping validation section with this fixed code -->
+    <script>
+        $(document).ready(function() {
+            // -------------------------------
+            //    SHIPPING NAME VALIDATION
+            // -------------------------------
+            $('#shippingName').on('keyup', function() {
+                var name = $(this).val().trim(); // Trim whitespace
+                var nameRegex = /^[A-Za-z\s/]+$/; // Only letters, spaces, and '/'
 
-            // Only check if there's input      
-            if (name.length > 0) { 
-                if (!nameRegex.test(name)) {
-                    $('#shipNameValidation').html('<span style="color:red; font-size:13px;">Invalid characters detected! Only alphabets, spaces, and "/" are allowed.</span>');
-                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                // Only check if there's input      
+                if (name.length > 0) { 
+                    if (!nameRegex.test(name)) {
+                        $('#shipNameValidation').html('<span style="color:red; font-size:13px;">Invalid characters detected! Only alphabets, spaces, and "/" are allowed.</span>');
+                        $('.submitBtn[type="submit"]').prop('disabled', true);
+                    } else {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/GlowyDays-JDBC/ValidateShippingServlet', // Calls servlet
+                            data: { shippingName: name }, // Match parameter name with servlet
+                            success: function (response) {
+                                if (response.trim() === "Valid Name") {
+                                    $('#shipNameValidation').html('<span style="color:green; font-size:13px;">Valid Name!</span>');
+                                    $('.submitBtn[type="submit"]').prop('disabled', false);
+                                } else {
+                                    $('#shipNameValidation').html('<span style="color:red; font-size:13px;">Invalid Name.</span>');
+                                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                                }
+                            },
+                            error: function () {
+                                $('#shipNameValidation').html('<span style="color:red;">Error validating name.</span>');
+                                $('.submitBtn[type="submit"]').prop('disabled', true);
+                            }
+                        });
+                    }
                 } else {
+                    $('#shipNameValidation').html(''); // Clear validation message
+                    $('.submitBtn[type="submit"]').prop('disabled', true); // Ensure form is disabled
+                }
+            });
+
+            // -------------------------------
+            //    SHIPPING EMAIL VALIDATION
+            // -------------------------------
+            $('#shippingEmail').on('keyup', function() {
+                var email = $(this).val().trim(); 
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+
+                // Only check if there's input      
+                if (email.length > 0) { 
+                    if (!emailRegex.test(email)) {
+                        $('#shipEmailValidation').html('<span style="color:red; font-size:13px;">Invalid email format! Please enter a valid email address.</span>');
+                        $('.submitBtn[type="submit"]').prop('disabled', true);
+                    } else {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/GlowyDays-JDBC/ValidateShippingServlet', 
+                            data: { shippingEmail: email },
+                            success: function (response) {
+                                if (response.trim() === "Valid Email") {
+                                    $('#shipEmailValidation').html('<span style="color:green; font-size:13px;">Valid email!</span>');
+                                    $('.submitBtn[type="submit"]').prop('disabled', false);
+                                } else {
+                                    $('#shipEmailValidation').html('<span style="color:red; font-size:13px;">Invalid email.</span>');
+                                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                                }
+                            },
+                            error: function () {
+                                $('#shipEmailValidation').html('<span style="color:red;">Error validating email.</span>');
+                                $('.submitBtn[type="submit"]').prop('disabled', true);
+                            }
+                        });
+                    }
+                } else {
+                    $('#shipEmailValidation').html('');
+                    $('.submitBtn[type="submit"]').prop('disabled', true)
+                }
+            });
+
+            // -------------------------------
+            //   SHIPPING MOBILE VALIDATION
+            // -------------------------------
+            $('#shippingMobile').on('keyup', function() {
+                var mobile = $(this).val().trim(); 
+                var mobileRegex = /^01[0-9]-[0-9]{7,8}$/; 
+
+                // Only check if there's input      
+                if (mobile.length > 0) { 
+                    if (!mobileRegex.test(mobile)) {
+                        $('#shipMobileValidation').html('<span style="color:red; font-size:13px;">Invalid mobile format! Please enter a valid mobile number.</span>');
+                        $('.submitBtn[type="submit"]').prop('disabled', true);
+                    } else {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/GlowyDays-JDBC/ValidateShippingServlet', 
+                            data: { shippingMobile: mobile },
+                            success: function (response) {
+                                if (response.trim() === "Valid Mobile") {
+                                    $('#shipMobileValidation').html('<span style="color:green; font-size:13px;">Valid mobile!</span>');
+                                    $('.submitBtn[type="submit"]').prop('disabled', false);
+                                } else {
+                                    $('#shipMobileValidation').html('<span style="color:red; font-size:13px;">Invalid mobile.</span>');
+                                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                                }
+                            },
+                            error: function () {
+                                $('#shipMobileValidation').html('<span style="color:red;">Error validating mobile.</span>');
+                                $('.submitBtn[type="submit"]').prop('disabled', true);
+                            }
+                        });
+                    }
+                } else {
+                    $('#shipMobileValidation').html('');
+                    $('.submitBtn[type="submit"]').prop('disabled', true); 
+                }
+            });
+
+            // -------------------------------
+            //   SHIPPING ADDRESS VALIDATION
+            // -------------------------------
+            $('#shippingAddress').on('keyup', function() {
+                var address = $(this).val().trim();
+
+                // Only check if there's input 
+                if (address.length > 0) {
                     $.ajax({
                         type: 'POST',
-                        url: '/GlowyDays-JDBC/ValidateShippingServlet', // Calls the servlet
-                        data: { shippingName: name }, // Match parameter name with servlet
-                        success: function (response) {
-                            if (response.trim() === "Valid Name") {
-                                $('#shipNameValidation').html('<span style="color:green; font-size:13px;">Valid Name!</span>');
+                        url: '/GlowyDays-JDBC/ValidateShippingServlet', 
+                        data: { shippingAddress: address }, 
+                        success: function(response) {
+                            if (response.trim() === "Valid Address") {
+                                $('#shipAddressValidation').html('<span style="color:green; font-size:13px;">Valid Address!</span>');
                                 $('.submitBtn[type="submit"]').prop('disabled', false);
                             } else {
-                                $('#shipNameValidation').html('<span style="color:red; font-size:13px;">Invalid Name.</span>');
+                                $('#shipAddressValidation').html('<span style="color:red; font-size:13px;">Please enter your address.</span>');
                                 $('.submitBtn[type="submit"]').prop('disabled', true);
                             }
                         },
-                        error: function () {
-                            $('#shipNameValidation').html('<span style="color:red;">Error validating name.</span>');
+                        error: function() {
+                            $('#shipAddressValidation').html('<span style="color:red;">Error validating address.</span>');
                             $('.submitBtn[type="submit"]').prop('disabled', true);
                         }
                     });
-                }
-            } else {
-                $('#shipNameValidation').html(''); // Clear validation message
-                $('.submitBtn[type="submit"]').prop('disabled', true); // Ensure form is disabled
-            }
-        });
-    
-        // -------------------------------
-        //    SHIPPING EMAIL VALIDATION
-        // -------------------------------
-        $('#shippingEmail').on('keyup', function() {
-            var email = $(this).val().trim(); // Trim whitespace
-            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regular expression for valid email format
-
-            // Only check if there's input      
-            if (email.length > 0) { 
-                if (!emailRegex.test(email)) {
-                    $('#shipEmailValidation').html('<span style="color:red; font-size:13px;">Invalid email format! Please enter a valid email address.</span>');
-                    $('.submitBtn[type="submit"]').prop('disabled', true);
                 } else {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/GlowyDays-JDBC/ValidateShippingServlet', // Calls the servlet
-                        data: { shippingEmail: email }, // Match parameter name with servlet
-                        success: function (response) {
-                            if (response.trim() === "Valid Email") {
-                                $('#shipEmailValidation').html('<span style="color:green; font-size:13px;">Valid email!</span>');
-                                $('.submitBtn[type="submit"]').prop('disabled', false);
-                            } else {
-                                $('#shipEmailValidation').html('<span style="color:red; font-size:13px;">Invalid email.</span>');
-                                $('.submitBtn[type="submit"]').prop('disabled', true);
-                            }
-                        },
-                        error: function () {
-                            $('#shipEmailValidation').html('<span style="color:red;">Error validating email.</span>');
-                            $('.submitBtn[type="submit"]').prop('disabled', true);
-                        }
-                    });
+                    $('#shipAddressValidation').html(''); // Clear validation message
+                    $('.submitBtn[type="submit"]').prop('disabled', true); // Disable submit button if input is empty
                 }
-            } else {
-                $('#shipEmailValidation').html(''); // Clear validation message
-                $('.submitBtn[type="submit"]').prop('disabled', true); // Ensure form is disabled
-            }
-        });
+            });
 
-        // -------------------------------
-        //   SHIPPING MOBILE VALIDATION
-        // -------------------------------
-        $('#shippingMobile').on('keyup', function() {
-            var mobile = $(this).val().trim(); // Trim whitespace
-            var mobileRegex = /^01[0-9]-[0-9]{7,8}$/; // Regular expression for valid mobile format
-
-            // Only check if there's input      
-            if (mobile.length > 0) { 
-                if (!mobileRegex.test(mobile)) {
-                    $('#shipMobileValidation').html('<span style="color:red; font-size:13px;">Invalid mobile format! Please enter a valid mobile number.</span>');
-                    $('.submitBtn[type="submit"]').prop('disabled', true);
-                } else {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/GlowyDays-JDBC/ValidateShippingServlet', // Calls the servlet
-                        data: { shippingMobile: mobile }, // Match parameter name with servlet
-                        success: function (response) {
-                            if (response.trim() === "Valid Mobile") {
-                                $('#shipMobileValidation').html('<span style="color:green; font-size:13px;">Valid mobile!</span>');
-                                $('.submitBtn[type="submit"]').prop('disabled', false);
-                            } else {
-                                $('#shipMobileValidation').html('<span style="color:red; font-size:13px;">Invalid mobile.</span>');
-                                $('.submitBtn[type="submit"]').prop('disabled', true);
-                            }
-                        },
-                        error: function () {
-                            $('#shipMobileValidation').html('<span style="color:red;">Error validating mobile.</span>');
-                            $('.submitBtn[type="submit"]').prop('disabled', true);
-                        }
-                    });
-                }
-            } else {
-                $('#shipMobileValidation').html(''); // Clear validation message
-                $('.submitBtn[type="submit"]').prop('disabled', true); // Ensure form is disabled
-            }
-        });
-        
-        // -------------------------------
-        //   SHIPPING ADDRESS VALIDATION
-        // -------------------------------
-        $('#shippingAddress').on('keyup', function() {
-            var address = $(this).val().trim();
-            
-            // Only check if there's input 
-            if (address.length > 0) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/GlowyDays-JDBC/ValidateShippingServlet', // Calls the servlet
-                    data: { shippingAddress: address }, // Match parameter name with servlet
-                    success: function(response) {
-                        if (response.trim() === "Valid Address") {
-                            $('#shipAddressValidation').html('<span style="color:green; font-size:13px;">Valid Address!</span>');
-                            $('.submitBtn[type="submit"]').prop('disabled', false);
-                        } else {
-                            $('#shipAddressValidation').html('<span style="color:red; font-size:13px;">Please enter your address.</span>');
-                            $('.submitBtn[type="submit"]').prop('disabled', true);
-                        }
-                    },
-                    error: function() {
-                        $('#shipAddressValidation').html('<span style="color:red;">Error validating address.</span>');
-                        $('.submitBtn[type="submit"]').prop('disabled', true);
-                    }
-                });
-            } else {
-                $('#shipAddressValidation').html(''); // Clear validation message
-                $('.submitBtn[type="submit"]').prop('disabled', true); // Disable submit button if input is empty
-            }
-        });
-        
-        // -------------------------------
-        //     SHIPPING CITY VALIDATION
-        // -------------------------------
-        $('#shippingCity').on('keyup', function() {
-            var city = $(this).val().trim();
-            if (city.length > 0) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/GlowyDays-JDBC/ValidateShippingServlet',
-                    data: { shippingCity: city }, // Match parameter name with servlet
-                    success: function(response) {
-                        if (response.trim() === "Valid City") {
-                            $('#shipCityValidation').html('<span style="color:green; font-size:13px;">Valid City!</span>');
-                            $('.submitBtn[type="submit"]').prop('disabled', false);
-                        } else {
-                            $('#shipCityValidation').html('<span style="color:red; font-size:13px;">Please enter your city.</span>');
-                            $('.submitBtn[type="submit"]').prop('disabled', true);
-                        }
-                    },
-                    error: function() {
-                        $('#shipCityValidation').html('<span style="color:red;">Error validating city.</span>');
-                        $('.submitBtn[type="submit"]').prop('disabled', true);
-                    }
-                });
-            } else {
-                $('#shipCityValidation').html('');
-                $('.submitBtn[type="submit"]').prop('disabled', true);
-            }
-        });
-        
-        // -------------------------------
-        //    SHIPPING STATE VALIDATION
-        // -------------------------------
-        $('#shippingState').on('change', function() {
-            var state = $(this).val();
-            
-            if (state.length > 0) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/GlowyDays-JDBC/ValidateShippingServlet',
-                    data: { shippingState: state }, // Match parameter name with servlet
-                    success: function(response) {
-                        if (response.trim() === "Valid State") {
-                            $('#shipStateValidation').html('<span style="color:green; font-size:13px;">Valid State!</span>');
-                            $('.submitBtn[type="submit"]').prop('disabled', false);
-                        } else {
-                            $('#shipStateValidation').html('<span style="color:red; font-size:13px;">Please select a state.</span>');
-                            $('.submitBtn[type="submit"]').prop('disabled', true);
-                        }
-                    },
-                    error: function() {
-                        $('#shipStateValidation').html('<span style="color:red;">Error validating state.</span>');
-                        $('.submitBtn[type="submit"]').prop('disabled', true);
-                    }
-                });
-            } else {
-                $('#shipStateValidation').html('<span style="color:red; font-size:13px;">Please select your state.</span>');
-                $('.submitBtn[type="submit"]').prop('disabled', true);
-            }
-        });
-        
-        // -------------------------------
-        //  SHIPPING POSTCODE VALIDATION
-        // -------------------------------
-        $('#shippingPostcode').on('keyup', function() {
-            var postcode = $(this).val().trim();
-            var postcodeRegex = /^\d{5}$/;
-            
-            if (postcode.length > 0) {
-                if (postcodeRegex.test(postcode)) {  // Check if input matches "12345" format
+            // -------------------------------
+            //     SHIPPING CITY VALIDATION
+            // -------------------------------
+            $('#shippingCity').on('keyup', function() {
+                var city = $(this).val().trim();
+                if (city.length > 0) {
                     $.ajax({
                         type: 'POST',
                         url: '/GlowyDays-JDBC/ValidateShippingServlet',
-                        data: { shippingPostcode: postcode }, // Match parameter name with servlet
+                        data: { shippingCity: city }, // Match parameter name with servlet
                         success: function(response) {
-                            if (response.trim() === "Valid Postcode") {
-                                $('#shipPostcodeValidation').html('<span style="color:green; font-size:13px;">Valid Postcode!</span>');
+                            if (response.trim() === "Valid City") {
+                                $('#shipCityValidation').html('<span style="color:green; font-size:13px;">Valid City!</span>');
                                 $('.submitBtn[type="submit"]').prop('disabled', false);
                             } else {
-                                $('#shipPostcodeValidation').html('<span style="color:red; font-size:13px;">Postcode not recognized.</span>');
+                                $('#shipCityValidation').html('<span style="color:red; font-size:13px;">Please enter your city.</span>');
                                 $('.submitBtn[type="submit"]').prop('disabled', true);
                             }
                         },
                         error: function() {
-                            $('#shipPostcodeValidation').html('<span style="color:red;">Server error. Try again.</span>');
+                            $('#shipCityValidation').html('<span style="color:red;">Error validating city.</span>');
                             $('.submitBtn[type="submit"]').prop('disabled', true);
                         }
                     });
                 } else {
-                    // Show error if not 5 digits
-                    $('#shipPostcodeValidation').html('<span style="color:red; font-size:13px;">Postcode must be 5 digits (e.g., 12345).</span>');
-                    $('.submitBtn[type="submit"]').prop('disabled', true);
-                }
-            } else {
-                // Empty field
-                $('#shipPostcodeValidation').html('');
-                $('.submitBtn[type="submit"]').prop('disabled', true);
-            }
-        });
-    });
-</script>
-
-<!-- Now add the payment validation script -->
-<script>
-    $(document).ready(function() {
-        // Initialize submit button as disabled
-        $('.submitBtn').prop('disabled', true);
-        
-        // -------------------------------
-        //    PAYMENT METHOD VALIDATION
-        // -------------------------------
-        $('.icon-container button').on('click', function() {
-            var method = $(this).data('method');
-            $('#payment_method').val(method);
-
-            // Reset all icons
-            $('.icon-container button').removeClass('active');
-            $(this).addClass('active');
-            
-            // Show selection message 
-            $('#paymtMethodValidation').html('<span style="color:green; font-size:13px;">Selected: ' + method.toUpperCase() + '</span>');
-
-            // Toggle card fields
-            if (method === 'visa' || method === 'master') {
-                $('#cardOwner, #cardNumber, #expMonth, #expYear, #cvv').prop('disabled', false).prop('required', true);
-            } else {
-                $('#cardOwner, #cardNumber, #expMonth, #expYear, #cvv').prop('disabled', true).val('').prop('required', false);
-                $('#cardOwnerValidation, #cardNumValidation, #expMonthValidation, #expYearValidation, #cvvValidation').html('');
-            }
-
-            // Call servlet to validate payment method
-            validatePaymentMethod(method);
-        });
-
-        function validatePaymentMethod(method) {
-            if (!method) {
-                $('#paymtMethodValidation').html('<span style="color:red; font-size:13px;">Please select payment method</span>');
-                $('.submitBtn[type="submit"]').prop('disabled', true);
-                return;
-            }
-
-            $.ajax({
-                type: 'POST',
-                url: '/GlowyDays-JDBC/ValidatePaymentServlet',
-                data: { payment_method: method },
-                success: function(response) {
-                    if (response.trim() === "Valid Payment Method") {
-                        $('#paymtMethodValidation').html('<span style="color:green; font-size:13px;">Valid payment method selected</span>');
-                        validateAllFields();
-                    } else {
-                        $('#paymtMethodValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
-                        $('.submitBtn[type="submit"]').prop('disabled', true);
-                    }
-                },
-                error: function() {
-                    $('#paymtMethodValidation').html('<span style="color:red;">Please select your payment method.</span>');
+                    $('#shipCityValidation').html('');
                     $('.submitBtn[type="submit"]').prop('disabled', true);
                 }
             });
-        }
 
-        // -------------------------------
-        //    CARD OWNER VALIDATION
-        // -------------------------------
-        $('#cardOwner').on('keyup', function() {
-            var owner = $(this).val().trim();
-            var ownerRegex = /^[A-Za-z\s/]+$/; // Only letters, spaces, and '/'
-            
-            if (owner.length > 0) {
-                if (!ownerRegex.test(owner)) {
-                    $('#cardOwnerValidation').html('<span style="color:red; font-size:13px;">Invalid characters! Only letters and spaces allowed.</span>');
-                    $('.submitBtn[type="submit"]').prop('disabled', true);
-                } else {
+            // -------------------------------
+            //    SHIPPING STATE VALIDATION
+            // -------------------------------
+            $('#shippingState').on('change', function() {
+                var state = $(this).val();
+
+                if (state.length > 0) {
                     $.ajax({
                         type: 'POST',
-                        url: '/GlowyDays-JDBC/ValidatePaymentServlet',
-                        data: { cardOwner: owner },
+                        url: '/GlowyDays-JDBC/ValidateShippingServlet',
+                        data: { shippingState: state },
                         success: function(response) {
-                            if (response.trim() === "Valid Card Owner") {
-                                $('#cardOwnerValidation').html('<span style="color:green; font-size:13px;">Valid name</span>');
-                                validateAllFields();
+                            if (response.trim() === "Valid State") {
+                                $('#shipStateValidation').html('<span style="color:green; font-size:13px;">Valid State!</span>');
+                                $('.submitBtn[type="submit"]').prop('disabled', false);
                             } else {
-                                $('#cardOwnerValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
+                                $('#shipStateValidation').html('<span style="color:red; font-size:13px;">Please select a state.</span>');
                                 $('.submitBtn[type="submit"]').prop('disabled', true);
                             }
                         },
                         error: function() {
-                            $('#cardOwnerValidation').html('<span style="color:red;">Error validating name</span>');
+                            $('#shipStateValidation').html('<span style="color:red;">Error validating state.</span>');
                             $('.submitBtn[type="submit"]').prop('disabled', true);
                         }
                     });
+                } else {
+                    $('#shipStateValidation').html('<span style="color:red; font-size:13px;">Please select your state.</span>');
+                    $('.submitBtn[type="submit"]').prop('disabled', true);
                 }
-            } else {
-                $('#cardOwnerValidation').html('');
-                $('.submitBtn[type="submit"]').prop('disabled', true);
-            }
+            });
+
+            // -------------------------------
+            //  SHIPPING POSTCODE VALIDATION
+            // -------------------------------
+            $('#shippingPostcode').on('keyup', function() {
+                var postcode = $(this).val().trim();
+                var postcodeRegex = /^\d{5}$/;
+
+                if (postcode.length > 0) {
+                    if (postcodeRegex.test(postcode)) {  
+                        $.ajax({
+                            type: 'POST',
+                            url: '/GlowyDays-JDBC/ValidateShippingServlet',
+                            data: { shippingPostcode: postcode },
+                            success: function(response) {
+                                if (response.trim() === "Valid Postcode") {
+                                    $('#shipPostcodeValidation').html('<span style="color:green; font-size:13px;">Valid Postcode!</span>');
+                                    $('.submitBtn[type="submit"]').prop('disabled', false);
+                                } else {
+                                    $('#shipPostcodeValidation').html('<span style="color:red; font-size:13px;">Postcode not recognized.</span>');
+                                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                                }
+                            },
+                            error: function() {
+                                $('#shipPostcodeValidation').html('<span style="color:red;">Server error. Try again.</span>');
+                                $('.submitBtn[type="submit"]').prop('disabled', true);
+                            }
+                        });
+                    } else {
+                        $('#shipPostcodeValidation').html('<span style="color:red; font-size:13px;">Postcode must be 5 digits (e.g., 12345).</span>');
+                        $('.submitBtn[type="submit"]').prop('disabled', true);
+                    }
+                } else {
+                    $('#shipPostcodeValidation').html('');
+                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                }
+            });
         });
+    </script>
 
-        // -------------------------------
-        //    CARD NUMBER VALIDATION
-        // -------------------------------
-        $('#cardNumber').on('keyup', function() {
-            var cardNumber = $(this).val().trim();
+    <!-- Payment Validation -->
+    <script>
+        $(document).ready(function() {
+            // Initialize submit button as disabled
+            $('.submitBtn').prop('disabled', true);
 
-            if (cardNumber.length > 0) {
+            // -------------------------------
+            //    PAYMENT METHOD VALIDATION
+            // -------------------------------
+            $('.icon-container button').on('click', function() {
+                var method = $(this).data('method');
+                $('#payment_method').val(method);
+
+                // Reset all icons
+                $('.icon-container button').removeClass('active');
+                $(this).addClass('active');
+
+                // Show selection message 
+                $('#paymtMethodValidation').html('<span style="color:green; font-size:13px;">Selected: ' + method.toUpperCase() + '</span>');
+
+                // Toggle card fields
+                if (method === 'visa' || method === 'master') {
+                    $('#cardOwner, #cardNumber, #expMonth, #expYear, #cvv').prop('disabled', false).prop('required', true);
+                } else {
+                    $('#cardOwner, #cardNumber, #expMonth, #expYear, #cvv').prop('disabled', true).val('').prop('required', false);
+                    $('#cardOwnerValidation, #cardNumValidation, #expMonthValidation, #expYearValidation, #cvvValidation').html('');
+                }
+
+                // Call servlet to validate payment method
+                validatePaymentMethod(method);
+            });
+
+            function validatePaymentMethod(method) {
+                if (!method) {
+                    $('#paymtMethodValidation').html('<span style="color:red; font-size:13px;">Please select payment method</span>');
+                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                    return;
+                }
+
                 $.ajax({
                     type: 'POST',
                     url: '/GlowyDays-JDBC/ValidatePaymentServlet',
-                    data: { cardNumber: cardNumber },
+                    data: { payment_method: method },
                     success: function(response) {
-                        if (response.trim() === "Valid Card Number") {
-                            $('#cardNumValidation').html('<span style="color:green; font-size:13px;">Valid card number</span>');
+                        if (response.trim() === "Valid Payment Method") {
+                            $('#paymtMethodValidation').html('<span style="color:green; font-size:13px;">Valid payment method selected</span>');
                             validateAllFields();
                         } else {
-                            $('#cardNumValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
+                            $('#paymtMethodValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
                             $('.submitBtn[type="submit"]').prop('disabled', true);
                         }
                     },
                     error: function() {
-                        $('#cardNumValidation').html('<span style="color:red;">Error validating card</span>');
+                        $('#paymtMethodValidation').html('<span style="color:red;">Please select your payment method.</span>');
                         $('.submitBtn[type="submit"]').prop('disabled', true);
                     }
                 });
-            } else {
-                $('#cardNumValidation').html('');
-                $('.submitBtn[type="submit"]').prop('disabled', true);
             }
-        });
 
-        // -------------------------------
-        //    EXPIRY MONTH VALIDATION
-        // -------------------------------
-        $('#expMonth').on('keyup', function() {
-            var month = $(this).val();
+            // -------------------------------
+            //    CARD OWNER VALIDATION
+            // -------------------------------
+            $('#cardOwner').on('keyup', function() {
+                var owner = $(this).val().trim();
+                var ownerRegex = /^[A-Za-z\s/]+$/; 
 
-            if (month.length > 0) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/GlowyDays-JDBC/ValidatePaymentServlet',
-                    data: { expMonth: month },
-                    success: function(response) {
-                        if (response.trim() === "Valid Expiry Month") {
-                            $('#expMonthValidation').html('<span style="color:green; font-size:13px;">Valid month</span>');
-                            validateAllFields();
-                        } else {
-                            $('#expMonthValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
+                if (owner.length > 0) {
+                    if (!ownerRegex.test(owner)) {
+                        $('#cardOwnerValidation').html('<span style="color:red; font-size:13px;">Invalid characters! Only letters and spaces allowed.</span>');
+                        $('.submitBtn[type="submit"]').prop('disabled', true);
+                    } else {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/GlowyDays-JDBC/ValidatePaymentServlet',
+                            data: { cardOwner: owner },
+                            success: function(response) {
+                                if (response.trim() === "Valid Card Owner") {
+                                    $('#cardOwnerValidation').html('<span style="color:green; font-size:13px;">Valid name</span>');
+                                    validateAllFields();
+                                } else {
+                                    $('#cardOwnerValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
+                                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                                }
+                            },
+                            error: function() {
+                                $('#cardOwnerValidation').html('<span style="color:red;">Error validating name</span>');
+                                $('.submitBtn[type="submit"]').prop('disabled', true);
+                            }
+                        });
+                    }
+                } else {
+                    $('#cardOwnerValidation').html('');
+                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                }
+            });
+
+            // -------------------------------
+            //    CARD NUMBER VALIDATION
+            // -------------------------------
+            $('#cardNumber').on('keyup', function() {
+                var cardNumber = $(this).val().trim();
+
+                if (cardNumber.length > 0) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/GlowyDays-JDBC/ValidatePaymentServlet',
+                        data: { cardNumber: cardNumber },
+                        success: function(response) {
+                            if (response.trim() === "Valid Card Number") {
+                                $('#cardNumValidation').html('<span style="color:green; font-size:13px;">Valid card number</span>');
+                                validateAllFields();
+                            } else {
+                                $('#cardNumValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
+                                $('.submitBtn[type="submit"]').prop('disabled', true);
+                            }
+                        },
+                        error: function() {
+                            $('#cardNumValidation').html('<span style="color:red;">Error validating card</span>');
                             $('.submitBtn[type="submit"]').prop('disabled', true);
                         }
-                    },
-                    error: function() {
-                        $('#expMonthValidation').html('<span style="color:red;">Error validating month</span>');
-                        $('.submitBtn[type="submit"]').prop('disabled', true);
-                    }
-                });
-            } else {
-                $('#expMonthValidation').html('');
-                $('.submitBtn[type="submit"]').prop('disabled', true);
-            }
-        });
+                    });
+                } else {
+                    $('#cardNumValidation').html('');
+                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                }
+            });
 
-        // -------------------------------
-        //    EXPIRY YEAR VALIDATION
-        // -------------------------------
-        $('#expYear').on('keyup', function() {
-            var year = $(this).val();
+            // -------------------------------
+            //    EXPIRY MONTH VALIDATION
+            // -------------------------------
+            $('#expMonth').on('keyup', function() {
+                var month = $(this).val();
 
-            if (year.length > 0) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/GlowyDays-JDBC/ValidatePaymentServlet',
-                    data: { expYear: year },
-                    success: function(response) {
-                        if (response.trim() === "Valid Expiry Year") {
-                            $('#expYearValidation').html('<span style="color:green; font-size:13px;">Valid year</span>');
-                            validateAllFields();
-                        } else {
-                            $('#expYearValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
+                if (month.length > 0) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/GlowyDays-JDBC/ValidatePaymentServlet',
+                        data: { expMonth: month },
+                        success: function(response) {
+                            if (response.trim() === "Valid Expiry Month") {
+                                $('#expMonthValidation').html('<span style="color:green; font-size:13px;">Valid month</span>');
+                                validateAllFields();
+                            } else {
+                                $('#expMonthValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
+                                $('.submitBtn[type="submit"]').prop('disabled', true);
+                            }
+                        },
+                        error: function() {
+                            $('#expMonthValidation').html('<span style="color:red;">Error validating month</span>');
                             $('.submitBtn[type="submit"]').prop('disabled', true);
                         }
-                    },
-                    error: function() {
-                        $('#expYearValidation').html('<span style="color:red;">Error validating year</span>');
-                        $('.submitBtn[type="submit"]').prop('disabled', true);
-                    }
-                });
-            } else {
-                $('#expYearValidation').html('');
-                $('.submitBtn[type="submit"]').prop('disabled', true);
-            }
-        });
+                    });
+                } else {
+                    $('#expMonthValidation').html('');
+                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                }
+            });
 
-        // -------------------------------
-        //    CVV VALIDATION
-        // -------------------------------
-        $('#cvv').on('keyup', function() {
-            var cvv = $(this).val();
+            // -------------------------------
+            //      EXPIRY YEAR VALIDATION
+            // -------------------------------
+            $('#expYear').on('keyup', function() {
+                var year = $(this).val();
 
-            if (cvv.length > 0) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/GlowyDays-JDBC/ValidatePaymentServlet',
-                    data: { cvv: cvv },
-                    success: function(response) {
-                        if (response.trim() === "Valid CVV") {
-                            $('#cvvValidation').html('<span style="color:green; font-size:13px;">Valid CVV</span>');
-                            validateAllFields();
-                        } else {
-                            $('#cvvValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
+                if (year.length > 0) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/GlowyDays-JDBC/ValidatePaymentServlet',
+                        data: { expYear: year },
+                        success: function(response) {
+                            if (response.trim() === "Valid Expiry Year") {
+                                $('#expYearValidation').html('<span style="color:green; font-size:13px;">Valid year</span>');
+                                validateAllFields();
+                            } else {
+                                $('#expYearValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
+                                $('.submitBtn[type="submit"]').prop('disabled', true);
+                            }
+                        },
+                        error: function() {
+                            $('#expYearValidation').html('<span style="color:red;">Error validating year</span>');
                             $('.submitBtn[type="submit"]').prop('disabled', true);
                         }
-                    },
-                    error: function() {
-                        $('#cvvValidation').html('<span style="color:red;">Error validating CVV</span>');
-                        $('.submitBtn[type="submit"]').prop('disabled', true);
-                    }
-                });
-            } else {
-                $('#cvvValidation').html('');
-                $('.submitBtn[type="submit"]').prop('disabled', true);
-            }
-        });
+                    });
+                } else {
+                    $('#expYearValidation').html('');
+                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                }
+            });
 
-        // Validate all fields before enabling submit
-        function validateAllFields() {
-            var method = $('#payment_method').val();
+            // -------------------------------
+            //         CVV VALIDATION
+            // -------------------------------
+            $('#cvv').on('keyup', function() {
+                var cvv = $(this).val();
 
-            // Payment method must be selected
-            if (!method) {
-                $('.submitBtn[type="submit"]').prop('disabled', true);
-                return;
-            }
+                if (cvv.length > 0) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/GlowyDays-JDBC/ValidatePaymentServlet',
+                        data: { cvv: cvv },
+                        success: function(response) {
+                            if (response.trim() === "Valid CVV") {
+                                $('#cvvValidation').html('<span style="color:green; font-size:13px;">Valid CVV</span>');
+                                validateAllFields();
+                            } else {
+                                $('#cvvValidation').html('<span style="color:red; font-size:13px;">' + response + '</span>');
+                                $('.submitBtn[type="submit"]').prop('disabled', true);
+                            }
+                        },
+                        error: function() {
+                            $('#cvvValidation').html('<span style="color:red;">Error validating CVV</span>');
+                            $('.submitBtn[type="submit"]').prop('disabled', true);
+                        }
+                    });
+                } else {
+                    $('#cvvValidation').html('');
+                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                }
+            });
 
-            // For cash/tng, check shipping fields validity
-            if (method === 'cash' || method === 'tng') {
-                var shippingValid = 
+            // Validate all fields before enabling submit
+            function validateAllFields() {
+                var method = $('#payment_method').val();
+
+                // Payment method must be selected
+                if (!method) {
+                    $('.submitBtn[type="submit"]').prop('disabled', true);
+                    return;
+                }
+
+                // For cash/tng, check shipping fields validation 
+                if (method === 'cash' || method === 'tng') {
+                    var shippingValid = 
+                        isFieldValid('shipNameValidation') &&
+                        isFieldValid('shipEmailValidation') &&
+                        isFieldValid('shipMobileValidation') &&
+                        isFieldValid('shipAddressValidation') &&
+                        isFieldValid('shipCityValidation') &&
+                        isFieldValid('shipStateValidation') &&
+                        isFieldValid('shipPostcodeValidation');
+
+                    $('.submitBtn[type="submit"]').prop('disabled', !shippingValid);
+                    return;
+                }
+
+                // For visa/master, check all fields
+                var allValid = 
                     isFieldValid('shipNameValidation') &&
                     isFieldValid('shipEmailValidation') &&
                     isFieldValid('shipMobileValidation') &&
                     isFieldValid('shipAddressValidation') &&
                     isFieldValid('shipCityValidation') &&
                     isFieldValid('shipStateValidation') &&
-                    isFieldValid('shipPostcodeValidation');
-                
-                $('.submitBtn[type="submit"]').prop('disabled', !shippingValid);
-                return;
+                    isFieldValid('shipPostcodeValidation') &&
+                    isFieldValid('cardOwnerValidation') &&
+                    isFieldValid('cardNumValidation') &&
+                    isFieldValid('expMonthValidation') &&
+                    isFieldValid('expYearValidation') &&
+                    isFieldValid('cvvValidation');
+
+                $('.submitBtn[type="submit"]').prop('disabled', !allValid);
             }
 
-            // For visa/master, check all fields
-            var allValid = 
-                isFieldValid('shipNameValidation') &&
-                isFieldValid('shipEmailValidation') &&
-                isFieldValid('shipMobileValidation') &&
-                isFieldValid('shipAddressValidation') &&
-                isFieldValid('shipCityValidation') &&
-                isFieldValid('shipStateValidation') &&
-                isFieldValid('shipPostcodeValidation') &&
-                isFieldValid('cardOwnerValidation') &&
-                isFieldValid('cardNumValidation') &&
-                isFieldValid('expMonthValidation') &&
-                isFieldValid('expYearValidation') &&
-                isFieldValid('cvvValidation');
-
-            $('.submitBtn[type="submit"]').prop('disabled', !allValid);
-        }
-        
-        // Helper function to check if a validation field is valid
-        function isFieldValid(fieldId) {
-            var field = $('#' + fieldId + ' span');
-            if (field.length === 0) return false;
-            return field.css('color') === 'rgb(0, 128, 0)'; // Check if the span is green
-        }
-    });
-</script>
+            // Helper function to check if a validation field is valid
+            function isFieldValid(fieldId) {
+                var field = $('#' + fieldId + ' span');
+                if (field.length === 0) return false;
+                return field.css('color') === 'rgb(0, 128, 0)'; // Check if the span is green
+            }
+        });
+    </script>
     
     <!-- Payment Method Selection & Card Input -->
     <script>

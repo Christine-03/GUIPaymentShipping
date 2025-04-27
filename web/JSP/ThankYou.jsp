@@ -17,11 +17,11 @@
             <div class="info-section">
                 <div class="info-row">
                     <span class="info-label">Order Number</span>
-                    <span class="info-value">${order.orderId}</span>
+                    <span class="info-value">${orders.orderId}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Order Date</span>
-                    <span class="info-value">${orderDate}</span>
+                    <span class="info-value">${orders.orderDate}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Order Status</span>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">Order Total</span>
-                    <span class="info-value">RM ${totalAmount}</span>
+                    <span class="info-value">RM ${orders.totalAmount}</span>
                 </div>
             </div>
             
